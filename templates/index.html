@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Rapport statistique</title>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<style>
+		.grid-container {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			grid-template-rows: 50vh 50vh;
+			grid-gap: 50px;
+			margin: 0px;
+			padding: 0px;
+		}
+
+		.grid-item canvas {
+			  width: 100%;
+			  height: 100%;
+		}
+		.chart-canvas {
+			  width: 100%;
+			  height: 100%;
+		}
+		.chart-par {
+			width: 40px;
+			height: 40px;
+		}
+
+	</style>
+</head>
+<body>
+	<h1>Rapport statistique du comportement des utilisateurs</h1>
+	<div class="grid-container">
+		<div class="grid-item">
+			<h5>Quel est le nombre actuel d'utilisateurs sur notre plateforme et combien de nouveaux utilisateurs ont rejoint la plateforme au cours de la dernière période ?</h5>
+			<canvas id="myChart1" class="chart-canvas"></canvas>
+		</div>
+		<div class="grid-item">
+			<h5>De quels pays nos utilisateurs se connectent-ils principalement sur notre plateforme ?</h5>
+			<canvas id="myChart7" class="chart-canvas"></canvas>
+		</div>
+		<div class="grid-item">
+			<h5>Dans quelle langue nos utilisateurs communiquent-ils principalement sur notre plateforme ?</h5>
+			<canvas id="myChart2" class="chart-canvas"></canvas>
+		</div>
+		<div class="grid-item">
+			<h5>Quels sont les catégories d'appareils utilisées par nos utilisateurs ?</h5>
+			<canvas id="myChart3" class="chart-canvas"></canvas>
+		</div>
+		<div class="grid-item">
+			<h5>Quel est le taux d'engagement de nos utilisateurs sur la plateforme ?</h5>
+			<canvas id="myChart5" class="chart-canvas"></canvas>
+		</div>
+		<div class="grid-item">
+			<h5>Quel est le taux de rebond de notre plateforme, à la fois en termes de sessions et de vues de page d'écran ? </h5>
+			<canvas id="myChart8" class="chart-canvas"></canvas>
+		</div>
+	</div>
+	<h5>Quelle est la durée moyenne des sessions de nos utilisateurs sur notre plateforme ?</h5>
+	<canvas id="myChart6" class="chart-par"></canvas>
+	<h5>Combien de vues uniques avons-nous par page sur notre plateforme ?</h5>
+	<canvas id="myChart4"></canvas>
+	<script>
+		fetch('/data')
+		.then(response => response.json())
+		.then(df1 => {
+			var ctx1 = document.getElementById('myChart1').getContext('2d');
+			var chart1 = new Chart(ctx1, {
+				type: 'line',
+				data: df1[0]
+			});
+			var ctx2 = document.getElementById('myChart2').getContext('2d');
+			var chart2 = new Chart(ctx2, {
+				type: 'doughnut',
+				data: df1[1]
+			});
+			var ctx3 = document.getElementById('myChart3').getContext('2d');
+    		var chart3 = new Chart(ctx3, {
+      			type: 'pie',
+  				data: df1[2]
+			});
+			var ctx4 = document.getElementById('myChart4').getContext('2d');
+			var chart4 = new Chart(ctx4, {
+				type: 'bar',
+			  	data: df1[3],
+			});
+			var ctx5 = document.getElementById('myChart5').getContext('2d');
+			var chart5 = new Chart(ctx5, {
+				type: 'scatter',
+			  	data: df1[4],
+			  	options: {
+					scales: {
+					  y: {
+						beginAtZero: true
+					  }
+					}
+				  }
+			});
+			var ctx6 = document.getElementById('myChart6').getContext('2d');
+			var chart6 = new Chart(ctx6, {
+				type: 'radar',
+			  	data: df1[5],
+			  	options: {
+					elements: {
+					  line: {
+						borderWidth: 3
+					  }
+					}
+				  },
+			});
+			var ctx7 = document.getElementById('myChart7').getContext('2d');
+			var chart7 = new Chart(ctx7, {
+				type: 'bar',
+			  	data: df1[6],
+			  	options: {
+					scales: {
+					  y: {
+						beginAtZero: true
+					  }
+					}
+				  },
+			});
+			var ctx8 = document.getElementById('myChart8').getContext('2d');
+			var chart8 = new Chart(ctx8, {
+				type: 'scatter',
+			  	data: df1[7]
+			});
+		});
+	</script>
+</body>
+</html>
